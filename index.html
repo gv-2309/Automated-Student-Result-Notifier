@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Marks Entry</title>
+</head>
+<body>
+  <h2>Enter Student Marks</h2>
+  <form id="marksForm">
+    <input type="text" id="name" placeholder="Student Name" required><br><br>
+    <input type="email" id="email" placeholder="Student Email" required><br><br>
+    <input type="text" id="phone" placeholder="Student Phone Number" required><br><br>
+    <input type="number" id="marks" placeholder="Enter Marks (out of 100)" required><br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    document.getElementById("marksForm").addEventListener("submit", async function(e){
+      e.preventDefault();
+      const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        marks: document.getElementById("marks").value
+      };
+
+      await fetch("http://localhost:5000/send-result", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+      });
+      alert("Marks submitted! Email & SMS will be sent.");
+    });
+  </script>
+</body>
+</html>
