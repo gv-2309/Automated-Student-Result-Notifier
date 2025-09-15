@@ -1,17 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Marks Entry</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h2>Enter Student Marks</h2>
-  <form id="marksForm">
-    <input type="text" id="name" placeholder="Student Name" required><br><br>
-    <input type="email" id="email" placeholder="Student Email" required><br><br>
-    <input type="text" id="phone" placeholder="Student Phone Number" required><br><br>
-    <input type="number" id="marks" placeholder="Enter Marks (out of 100)" required><br><br>
-    <button type="submit">Submit</button>
-  </form>
+<body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">📊 Student Marks Entry</h2>
+    
+    <form id="marksForm" class="space-y-4">
+      <input type="text" id="name" placeholder="👤 Student Name" required 
+             class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none">
+      
+      <input type="email" id="email" placeholder="📧 Student Email" required 
+             class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none">
+      
+      <input type="text" id="phone" placeholder="📱 Phone Number (+91XXXXXXXXXX)" required 
+             class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none">
+      
+      <input type="number" id="marks" placeholder="📝 Marks (out of 100)" required 
+             class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none">
+      
+      <button type="submit" 
+              class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg shadow-lg transition duration-300">
+        🚀 Submit Marks
+      </button>
+    </form>
+    
+    <p id="status" class="text-center mt-4 text-gray-700 font-medium"></p>
+  </div>
 
   <script>
     document.getElementById("marksForm").addEventListener("submit", async function(e){
@@ -23,13 +43,21 @@
         marks: document.getElementById("marks").value
       };
 
-      await fetch("http://localhost:5000/send-result", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-      });
-      alert("Marks submitted! Email & SMS will be sent.");
+      try {
+        const res = await fetch("http://localhost:5000/send-result", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        document.getElementById("status").innerText = 
+          result.success ? "✅ Results sent via Email & SMS!" : "❌ Error sending results.";
+      } catch (err) {
+        document.getElementById("status").innerText = "⚠️ Server not responding!";
+      }
     });
   </script>
+
 </body>
 </html>
